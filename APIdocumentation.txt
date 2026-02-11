@@ -1,0 +1,86 @@
+==============================
+GET /api/user
+==============================
+Description:
+Retrieve the details of the currently logged-in user for Dashboard Overview
+
+Headers:
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+Request Example:
+GET /api/user HTTP/1.1
+Host: localhost:8000
+Authorization: Bearer 2|gPBgMf0pwTYmaFT2ESL0pz3fsOoiTzEPWbaOz32Re2aa1ce2
+
+Response Example (Success – 200):
+{
+    "active_site_id": 5,
+    "customer": {
+        "id": 4,
+        "name": "Nikolaus-Yundt"
+    },
+    "sites": [
+        {"id": 5, "name": "Cummerata-West Site"},
+        {"id": 6, "name": "Bahringer-Bahringer Site"}
+    ],
+    "stats": {
+        "sitesCount": 2,
+        "activeMeters": 1,
+        "lastBill": "333.77",
+        "outstanding": "694.65"
+    }
+}
+
+Response Example (Unauthorized – 401):
+{
+    "message": "Unauthorized. Please provide a valid token."
+}
+
+Notes:
+- Use the default user account provided in the project to test this endpoint.
+- Requires a valid authentication token.
+- Helps display user-specific data across the portal.
+
+
+
+==============================
+GET /api/sites/{site_id}/overview
+==============================
+Description:
+Single site overview
+Retrieve an overview of a specific site, including site details, consumption history, and meters information.
+
+Headers:
+Authorization: Bearer <access_token>
+Content-Type: application/json
+
+Request Example:
+GET /api/sites/5/overview HTTP/1.1
+Host: localhost:8000
+Authorization: Bearer gPBgMf0pwTYmaFT2ESL0pz3fsOoiTzEPWbaOz32Re2aa1ce2
+
+Response Example (Success – 200):
+{
+    "site": {
+        "id": 5,
+        "name": "Cummerata-West Site"
+    },
+    "consumption": [
+        {
+            "month": "Feb",
+            "usage": "694.65"
+        }
+    ],
+    "meters": [
+        {
+            "id": 9,
+            "meter_id": "MTR-60853",
+            "type": "Electric",
+            "latest_reading": "859.92"
+        }
+        //...
+    ]
+}
+
+
