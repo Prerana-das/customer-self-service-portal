@@ -1,6 +1,6 @@
-Tech Stack
+### Tech Stack
 
-Backend:
+##### Backend:
 
 Laravel 12 (PHP Framework)
 
@@ -8,7 +8,7 @@ Sanctum (API Token Authentication)
 
 MySQL 
 
-Frontend:
+##### Frontend:
 
 React 19
 
@@ -18,7 +18,7 @@ TailwindCSS (Responsive UI)
 
 Axios (HTTP client)
 
-Other Tools:
+##### Other Tools:
 
 Vite (Frontend bundler)
 
@@ -26,9 +26,7 @@ Composer (PHP dependency manager)
 
 npm / Node.js (JS dependency manager)
 
-Setup Instructions
-
-### Run command
+### Setup Instructions & Run command
 
 ```shell
 composer install
