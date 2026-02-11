@@ -30,6 +30,8 @@ class Meter extends Model
         'meter_number',
         'status',
         'site_id',
+        'type',
+        'latest_reading',
     ];
 
     public function site(): BelongsTo

@@ -1,17 +1,12 @@
 <?php
 
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Website\SiteController;
+use App\Http\Controllers\Website\BillingController;
 use App\Http\Controllers\Website\DashboardController;
 
-
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-
-// Route::middleware(['auth:sanctum', 'abilities:Primary'])->group(function () {
-//     Route::post('/billing-preference', BillingPreferenceController::class);
-// });
 
 // Login page
 Route::get('/login', function () {
@@ -22,3 +17,9 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return Inertia::render('Auth/Register');
 });
+
+// Site details page
+Route::get('/sites/{id}', [SiteController::class, 'index'])->name('site');
+
+//Billing
+Route::get('/billing', [BillingController::class, 'index'])->name('billing');

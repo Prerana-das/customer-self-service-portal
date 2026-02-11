@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { request } from "../../Request";
 import { Head } from "@inertiajs/react";
+import AuthenticateLayout from "../../Layouts/AuthenticateLayout";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -34,8 +35,14 @@ export default function Dashboard() {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "/login";
+        }
+
         fetchData();
     }, []);
+
 
     // Switch Site
     const switchSite = (siteId) => {
@@ -56,76 +63,87 @@ export default function Dashboard() {
         );
 
     return (
-        <div className="min-h-screen bg-sky-50 p-4 sm:p-6 lg:p-12">
-            <Head title="Dashboard" />
+        <AuthenticateLayout>
+            <div className="min-h-screen bg-sky-50 p-4 sm:p-6 lg:p-12">
+                <Head title="Dashboard" />
 
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-                <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-3 sm:mb-0">
-                    Welcome, {user.name}
-                </h1>
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
 
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <select
-                        value={activeSiteId || ""}
-                        onChange={(e) => switchSite(e.target.value)}
-                        className="border px-3 py-2 rounded-lg focus:ring-2 focus:ring-sky-400 w-full sm:w-auto"
-                    >
-                        {sites.map((site) => (
-                            <option key={site.id} value={site.id}>
-                                {site.name}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                        <h5 className="font-bold text-blue-600">
+                            All Sites
+                        </h5>
+                        <select
+                            value={activeSiteId || ""}
+                            onChange={(e) => switchSite(e.target.value)}
+                            className="border px-3 py-2 rounded-lg focus:ring-2 focus:ring-sky-400 w-full sm:w-auto"
+                        >
+                            {sites.map((site) => (
+                                <option key={site.id} value={site.id}>
+                                    {site.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
 
-                    <button
-                        onClick={logout}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                    >
-                        Logout
-                    </button>
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Customer */}
+                    <div className="bg-white rounded-2xl shadow p-6 text-center">
+                        <h2 className="text-gray-500">Customer</h2>
+                        <p className="text-xl font-bold text-blue-600 mt-2">
+                            {customer?.name}
+                        </p>
+                    </div>
+
+                    {/* Sites Count */}
+                    <div className="bg-white rounded-2xl shadow p-6 text-center">
+                        <h2 className="text-gray-500">Sites</h2>
+                        <p className="text-xl font-bold text-blue-600 mt-2">
+                            {stats.sitesCount}
+                        </p>
+
+                        {sites && sites.length > 0 ? (
+                            <div className="space-y-2">
+                                {sites.map((site) => (
+                                    <a
+                                        key={site.id}
+                                        href={`/sites/${site.id}`}
+                                        className="block bg-gray-50 hover:bg-blue-50 p-3 rounded-lg transition text-blue-600 font-medium"
+                                    >
+                                        {site.name}
+                                    </a>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-400">No sites available</p>
+                        )}
+                    </div>
+
+                    {/* Active Meters */}
+                    <div className="bg-white rounded-2xl shadow p-6 text-center">
+                        <h2 className="text-gray-500">Active Meters</h2>
+                        <p className="text-xl font-bold text-blue-600 mt-2">
+                            {stats.activeMeters}
+                        </p>
+                    </div>
+
+                    {/* Billing */}
+                    <div className="bg-white rounded-2xl shadow p-6 text-center">
+                        <h2 className="text-gray-500">Last Bill</h2>
+                        <p className="text-xl font-bold text-blue-600 mt-2">
+                            ${stats.lastBill}
+                        </p>
+
+                        <h2 className="text-gray-500 mt-4">Outstanding</h2>
+                        <p className="text-xl font-bold text-red-500 mt-1">
+                            ${stats.outstanding}
+                        </p>
+                    </div>
                 </div>
             </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Customer */}
-                <div className="bg-white rounded-2xl shadow p-6 text-center">
-                    <h2 className="text-gray-500">Customer</h2>
-                    <p className="text-xl font-bold text-blue-600 mt-2">
-                        {customer?.name}
-                    </p>
-                </div>
-
-                {/* Sites Count */}
-                <div className="bg-white rounded-2xl shadow p-6 text-center">
-                    <h2 className="text-gray-500">Sites</h2>
-                    <p className="text-xl font-bold text-blue-600 mt-2">
-                        {stats.sitesCount}
-                    </p>
-                </div>
-
-                {/* Active Meters */}
-                <div className="bg-white rounded-2xl shadow p-6 text-center">
-                    <h2 className="text-gray-500">Active Meters</h2>
-                    <p className="text-xl font-bold text-blue-600 mt-2">
-                        {stats.activeMeters}
-                    </p>
-                </div>
-
-                {/* Billing */}
-                <div className="bg-white rounded-2xl shadow p-6 text-center">
-                    <h2 className="text-gray-500">Last Bill</h2>
-                    <p className="text-xl font-bold text-blue-600 mt-2">
-                        ${stats.lastBill}
-                    </p>
-
-                    <h2 className="text-gray-500 mt-4">Outstanding</h2>
-                    <p className="text-xl font-bold text-red-500 mt-1">
-                        ${stats.outstanding}
-                    </p>
-                </div>
-            </div>
-        </div>
+        </AuthenticateLayout>
     );
 }

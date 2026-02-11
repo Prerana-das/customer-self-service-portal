@@ -13,11 +13,16 @@ axios.interceptors.request.use((config) => {
 });
 
 request.get = async (path, params = {}) => {
-  let response = await axios.get(baseURL + path + new URLSearchParams(params));
-  if (response.status === 200 || response.status === 201) {
-    return response.data;
-  } else {
-    return false;
+   try {
+    let response = await axios.get(baseURL + path + new URLSearchParams(params));
+    if (response.status === 200 || response.status === 201) {
+      return response.data;
+    } else {
+      return false;
+    }
+
+  } catch (error) {
+      handleError(error);
   }
 };
 
@@ -32,17 +37,18 @@ request.post = async (path, params) => {
     return response.data;
 
   } catch (error) {
-      if (error.response?.data?.errors) {
-        const errors = error.response.data.errors;
-        Object.values(errors).forEach((fieldErrors) => {
-            fieldErrors.forEach((message) => {
-                commonToast.error(message);
-            });
-        });
-    }
-    else{
-      commonToast.error('An error occurred. Please try again.');
-    }
+    //   if (error.response?.data?.errors) {
+    //     const errors = error.response.data.errors;
+    //     Object.values(errors).forEach((fieldErrors) => {
+    //         fieldErrors.forEach((message) => {
+    //             commonToast.error(message);
+    //         });
+    //     });
+    // }
+    // else{
+    //   commonToast.error('An error occurred. Please try again.');
+    // }
+      handleError(error);
   }
 };
 
@@ -57,18 +63,9 @@ request.requestJsonPost = async (path, params) => {
     return response.data;
 
   } catch (error) {
-      if (error.response?.data?.errors) {
-        const errors = error.response.data.errors;
-        Object.values(errors).forEach((fieldErrors) => {
-            fieldErrors.forEach((message) => {
-                commonToast.error(message);
-            });
-        });
-    }
-    else{
-      commonToast.error('An error occurred. Please try again.');
-    }
+      handleError(error);
   }
+
 };
 
 
@@ -116,3 +113,26 @@ request.getAll = async (path) => {
     return false;
   }
 };
+
+function handleError(error) {
+  const status = error.response?.status;
+
+  // Token invalid / unauthorized
+  if (status === 401 || status === 403) {
+    localStorage.removeItem("token");
+    commonToast.error("Session expired. Please login again.");
+    window.location.href = "/login";
+    return;
+  }
+
+  // Validation errors
+  if (error.response?.data?.errors) {
+    const errors = error.response.data.errors;
+    Object.values(errors).forEach((errArray) =>
+      errArray.forEach((msg) => commonToast.error(msg))
+    );
+    return;
+  }
+
+  commonToast.error("An unexpected error occurred.");
+}

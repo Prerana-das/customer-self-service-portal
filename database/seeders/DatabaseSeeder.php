@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Meter;
 use App\Models\Customer;
 use Illuminate\Database\Seeder;
+use App\Models\BillingPreference;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -38,9 +39,16 @@ class DatabaseSeeder extends Seeder
                 
                 //For each site create meters and bills
                 $customer->sites->each(function ($site) {
-                    Meter::factory()->count(2)->create(['site_id' => $site->id]);
+                    Meter::factory()->count(2)->create([
+                        'site_id' => $site->id,
+                        'type' => fake()->randomElement(['Electric', 'Gas']),
+                        'latest_reading' => fake()->randomFloat(2, 0, 2000),
+                    ]);
                     Bill::factory()->count(2)->create(['site_id' => $site->id]);
                 });
+
+                //billing preference for each customer
+                BillingPreference::factory()->create(['customer_id' => $customer->id]);
         });
 
     }
