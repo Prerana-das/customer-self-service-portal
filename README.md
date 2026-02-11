@@ -66,11 +66,17 @@ php artisan db:seed
 
 The seeder generates:
 
+#### Please use default user credentials for testing
 1 default user
 
 Email: test@example.com
 
 Password: password
+
+```shell
+Email: test@example.com
+Password: password
+```
 
 3 customers
 
