@@ -1,0 +1,31 @@
+==============================
+Code Flow – Example: Registration
+==============================
+
+1. Client sends a request
+   - The user submits data from the frontend, for example, filling out the registration form.
+
+2. Route receives the request
+   - The API route matches the URL and directs the request to the corresponding controller.
+
+3. Controller handles the request
+   - The controller acts as the entry point and decides what needs to be done with the request.
+
+4. Request class validates the data
+   - Ensures the input is correct and authorized.
+   - Example: For registration, it checks that name, email, and password are valid and not already in use.
+
+5. DTO (Data Transfer Object) structures the data
+   - Converts the request data into a clean, standardized object for the Action.
+   - Example: Registration DTO contains only the fields needed to create a new user.
+
+6. Action executes the business logic
+   - Performs the main task, such as creating a new user, hashing passwords, or sending confirmation emails.
+
+7. Controller returns the response
+   - Sends the result back to the client, e.g., success confirmation or validation errors.
+
+Purpose of this structure:
+- Keeps code clean, organized, and maintainable.
+- Separates validation, business logic, and data handling.
+- Makes the system reusable, safe, and easy to test.

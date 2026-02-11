@@ -81,3 +81,10 @@ Password: password
 2 meters per site
 
 2 bills per site
+
+### Important note
+
+For a better understanding of the API endpoints and the overall code flow, please refer to the following documents:  
+- `CodeFlow.txt` – explains the project’s code structure and workflow, using examples like registration. 
+- `APIDocumentation.txt` – contains detailed information about some API endpoints and how to test them.  
+ 
