@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Bill;
 use App\Models\User;
-use App\Models\Meter;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Actions\Website\Dashboard\UserDashboardAction;
 
 class AuthController extends Controller
 {
@@ -83,44 +82,9 @@ class AuthController extends Controller
         ]);
     }
 
-     public function me(Request $request)
+    public function getUser(Request $request, UserDashboardAction $userDashboardAction)
     {
-        // return response()->json($request->user());
-
-
-        $user = $request->user();
-
-        // Load related customer
-        $customer = $user->customer;
-
-        // Count customer sites
-        $sitesCount = $customer->sites()->count();
-
-        // Count active meters
-        $activeMetersCount = Meter::whereHas('site', function ($q) use ($customer) {
-            $q->where('customer_id', $customer->id);
-        })->where('status', 'active')->count();
-        
-        // Last bill 
-        $lastBill = Bill::whereHas('site', function ($q) use ($customer) {
-            $q->where('customer_id', $customer->id);
-        })->latest()->first();
-
-        // sum of unpaid bills
-        $outstanding = Bill::whereHas('site', function ($q) use ($customer) {
-            $q->where('customer_id', $customer->id);
-        })->where('status', 'unpaid')->sum('amount');
-
-        return response()->json([
-            'user' => $user,
-            'customer' => $customer,
-            'stats' => [
-                'sites' => $sitesCount,
-                'activeMeters' => $activeMetersCount,
-                'lastBill' => $lastBill ? $lastBill->amount : 0,
-                'outstanding' => $outstanding,
-            ],
-        ]);
+        return $userDashboardAction->userData($request);
     }
 
     public function logout(Request $request)

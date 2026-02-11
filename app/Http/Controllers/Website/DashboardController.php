@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Website;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Actions\Website\Dashboard\DashboardStatsAction;
+use App\Actions\Website\Dashboard\UserDashboardAction;
+
 
 class DashboardController extends Controller
 {
-    public function index(Request $request, DashboardStatsAction $dashboardStatsAction) 
+    public function index(Request $request, UserDashboardAction $userDashboardAction) 
     {
-        return $dashboardStatsAction->execute($request);
+        return Inertia::render('Dashboard/Index');
     }
 }
