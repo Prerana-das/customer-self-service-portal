@@ -1,3 +1,33 @@
+Tech Stack
+
+Backend:
+
+Laravel 12 (PHP Framework)
+
+Sanctum (API Token Authentication)
+
+MySQL 
+
+Frontend:
+
+React 19
+
+Inertia.js (Laravel + React integration)
+
+TailwindCSS (Responsive UI)
+
+Axios (HTTP client)
+
+Other Tools:
+
+Vite (Frontend bundler)
+
+Composer (PHP dependency manager)
+
+npm / Node.js (JS dependency manager)
+
+Setup Instructions
+
 ### Run command
 
 ```shell
