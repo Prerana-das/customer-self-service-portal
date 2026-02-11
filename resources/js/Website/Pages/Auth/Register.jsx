@@ -2,6 +2,7 @@ import { Head } from "@inertiajs/react";
 import { useState } from "react";
 import GuestLayout from "../../Layouts/GuestLayout";
 import { request } from "../../Request/index";
+import commonToast from '../../Utilities/CommonToast';
 import { useEffect } from "react";
 
 export default function Register() {
@@ -23,11 +24,13 @@ export default function Register() {
             password: form.password,
             password_confirmation: form.password_confirmation,
         });
+        
 
         setForm({ ...form, processing: false });
 
         if (response && response.token) {
             localStorage.setItem("token", response.token);
+            commonToast.success('You are successfully registered');
             window.location.href = "/";
         }
     };
@@ -56,6 +59,7 @@ export default function Register() {
                     required
                 />
 
+
                 <input
                     type="email"
                     placeholder="Email"
@@ -64,6 +68,7 @@ export default function Register() {
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     required
                 />
+                
 
                 <input
                     type="password"
@@ -73,6 +78,7 @@ export default function Register() {
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     required
                 />
+            
 
                 <input
                     type="password"
@@ -84,6 +90,7 @@ export default function Register() {
                     }
                     required
                 />
+
 
                 <button
                     type="submit"

@@ -16,13 +16,13 @@ const commonToast = (function ($) {
 
     // Function to hide toast messages
     const hideToast = (selector) => {
-        $(selector).fadeOut(1000, () => {
+        $(selector).fadeOut(800, () => {
             selector.remove();
         });
     };
 
     // Function to auto-hide toast messages
-    const autoHide = (selector, delay = 3000) => {
+    const autoHide = (selector, delay = 1000) => {
         setTimeout(() => {
             hideToast(selector);
         }, delay);

@@ -34,9 +34,11 @@ request.post = async (path, params) => {
   } catch (error) {
       if (error.response?.data?.errors) {
         const errors = error.response.data.errors;
-        for (const errorMessage of Object.values(errors)) {
-            return commonToast.error(errorMessage);
-        }
+        Object.values(errors).forEach((fieldErrors) => {
+            fieldErrors.forEach((message) => {
+                commonToast.error(message);
+            });
+        });
     }
     else{
       commonToast.error('An error occurred. Please try again.');
@@ -57,9 +59,11 @@ request.requestJsonPost = async (path, params) => {
   } catch (error) {
       if (error.response?.data?.errors) {
         const errors = error.response.data.errors;
-        for (const errorMessage of Object.values(errors)) {
-            return commonToast.error(errorMessage);
-        }
+        Object.values(errors).forEach((fieldErrors) => {
+            fieldErrors.forEach((message) => {
+                commonToast.error(message);
+            });
+        });
     }
     else{
       commonToast.error('An error occurred. Please try again.');

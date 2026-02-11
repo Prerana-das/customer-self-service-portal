@@ -1,6 +1,6 @@
 ### Tech Stack
 
-##### Backend:
+#### Backend:
 
 Laravel 12 (PHP Framework)
 
@@ -8,7 +8,7 @@ Sanctum (API Token Authentication)
 
 MySQL 
 
-##### Frontend:
+#### Frontend:
 
 React 19
 
@@ -18,7 +18,7 @@ TailwindCSS (Responsive UI)
 
 Axios (HTTP client)
 
-##### Other Tools:
+#### Other Tools:
 
 Vite (Frontend bundler)
 
@@ -55,7 +55,7 @@ php artisan migrate
 For fresh ( Drop all existing table & migrate again)
 
 ```shell
-php artisan migrate --fresh
+php artisan migrate:fresh
 ```
 
 ### Seeder Command

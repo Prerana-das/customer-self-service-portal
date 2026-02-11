@@ -2,6 +2,7 @@ import { Head } from "@inertiajs/react";
 import { useState } from "react";
 import GuestLayout from "../../Layouts/GuestLayout";
 import { request } from "../../Request";
+import commonToast from '../../Utilities/CommonToast';
 
 export default function Login() {
     const [form, setForm] = useState({
@@ -22,6 +23,7 @@ export default function Login() {
         setForm({ ...form, processing: false });
 
         if (response && response.token) {
+            commonToast.success('You are successfully logged in');
             localStorage.setItem("token", response.token);
             window.location.href = "/";
         }

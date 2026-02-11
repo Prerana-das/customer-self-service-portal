@@ -7,17 +7,13 @@ const GuestLayout = ({ children }) => {
             <div>
                 <Link href="/">
                     {/* <img className="max-w-[180px] mx-auto" src={logoImage} alt="Logo" /> */}
-                    Logo
+                    {/* Logo */}
                 </Link>
             </div>
 
             <div className="w-full sm:max-w-md mt-6 px-6 py-6 bg-white shadow-lg rounded-xl">
                 {children}
             </div>
-
-            <footer className="mt-6 text-center text-sm text-gray-500">
-                {/* &copy; {new Date().getFullYear()} Your Company. All rights reserved. */}
-            </footer>
         </div>
     );
 };

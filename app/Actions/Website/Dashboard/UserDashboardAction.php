@@ -2,11 +2,12 @@
 
 namespace App\Actions\Website\Dashboard;
 
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 class UserDashboardAction
 {
-    public function userData(Request $request)
+    public function userData(Request $request, $siteId = null)
     {
         $user = $request->user()->load('customer');
 
@@ -15,31 +16,20 @@ class UserDashboardAction
         // Get all sites 
         $sites = $customer->sites()->select('id', 'name')->get();
 
-        // Determine active site (first site by default)
-        $activeSiteId = request()->query('site_id') 
-            ?? $sites->first()?->id;
-
-        $activeSite = $customer->sites()->find($activeSiteId);
-
-        if (!$activeSite) {
-            return response()->json([
-                'message' => 'No site found'
-            ], 404);
-        }
+        $activeSite = $siteId
+            ? $sites->firstWhere('id', $siteId)
+            : $sites->first();
 
         // Calculate stats 
-        $stats = [
+         $stats = [
             'sitesCount' => $sites->count(),
-            'activeMeters' => $activeSite->meters()
-                ->where('status', 'active')
-                ->count(),
-            'lastBill' => $activeSite->bills()
-                ->latest()
-                ->value('amount') ?? 0,
-            'outstanding' => $activeSite->bills()
-                ->where('status', 'unpaid')
-                ->sum('amount') ?? 0,
+            'activeMeters' => 0,
+            'lastBill' => 0,
+            'outstanding' => 0,
         ];
+        if ($activeSite) {
+            $stats = $this->siteStats($activeSite, $stats['sitesCount']);
+        }
 
         return response()->json([
             'user' => [
@@ -52,8 +42,27 @@ class UserDashboardAction
                 'name' => $customer->name,
             ],
             'sites' => $sites,
-            'active_site_id' => $activeSite->id,
+            'active_site_id' => $activeSite?->id ?? null,
             'stats' => $stats,
         ]);
+    }
+
+
+     public function siteStats(Site $site, int $sitesCount): array
+    {
+        return [
+            'sitesCount' => $sitesCount,
+            'activeMeters' => $site->meters()
+                ->where('status', 'active')
+                ->count(),
+
+            'lastBill' => optional(
+                $site->bills()->latest()->first()
+            )->amount ?? 0,
+
+            'outstanding' => $site->bills()
+                ->where('status', 'unpaid')
+                ->sum('amount'),
+        ];
     }
 }

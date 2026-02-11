@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+            'user_type' => 'Primary',
         ]);
 
         Customer::factory()
@@ -31,11 +33,15 @@ class DatabaseSeeder extends Seeder
             ->hasSites(2)   // 2 sites per customer
             ->create()
             ->each(function ($customer) {
+                // Assign test user to this customer
+                User::where('id', 1)->update(['customer_id' => $customer->id]);
+                
                 //For each site create meters and bills
                 $customer->sites->each(function ($site) {
                     Meter::factory()->count(2)->create(['site_id' => $site->id]);
                     Bill::factory()->count(2)->create(['site_id' => $site->id]);
                 });
         });
+
     }
 }
