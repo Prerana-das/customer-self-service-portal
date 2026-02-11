@@ -7,7 +7,7 @@
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="manifest" href="/manifest.json">
-
+    <script src="{{ asset('js/jquery.min.js') }}" ></script>
     {{-- @routes --}}
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/Website/app.jsx'])
